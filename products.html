@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Furniture - Products</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light Slate 50 */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        /* Custom scrollbar for better aesthetics */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header Section - Consistent across all pages -->
+    <header class="bg-gray-900 text-white shadow-lg py-4 px-6 md:px-10 lg:px-16 sticky top-0 z-50">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold tracking-tight mb-3 md:mb-0">
+                <a href="index.html" class="hover:text-gray-300 transition-colors duration-200">Aurora Furniture</a>
+            </h1>
+            <nav class="w-full md:w-auto">
+                <ul class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-6 items-center">
+                    <li><a href="index.html" class="text-lg hover:text-gray-300 transition-colors duration-200">Home</a></li>
+                    <li><a href="products.html" class="text-lg hover:text-gray-300 transition-colors duration-200">Products</a></li>
+                    <!-- Removed About Us and Contact from main navigation for brevity -->
+                    <li>
+                        <a href="checkout.html" class="flex items-center text-lg bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors duration-200 shadow-md">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Cart (<span id="cartCount">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Message Box for notifications - This element is needed on every page that uses showMessageBox -->
+    <div id="messageBox" class="fixed top-20 right-5 bg-green-500 text-white px-5 py-3 rounded-lg shadow-xl transition-all duration-300 transform translate-x-full opacity-0 z-[100]" role="alert">
+        <!-- Message content will be inserted here by shared.js -->
+    </div>
+
+    <!-- Main Content Area - Product Listing Page Specific Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12 relative overflow-hidden">
+        <section class="bg-white rounded-xl shadow-lg p-8 md:p-12 mb-10">
+            <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-10 md:mb-16">Our Furniture Collections</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="productList">
+                <!-- Product cards will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section - Consistent across all pages -->
+    <footer class="bg-gray-900 text-white py-8 px-6 md:px-10 lg:px-16 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-lg mb-4">&copy; 2025 Aurora Furniture. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 text-xl">
+                <a href="#" class="hover:text-blue-400 transition-colors duration-200">Privacy Policy</a>
+                <a href="#" class="hover:text-blue-400 transition-colors duration-200">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link to shared JavaScript -->
+    <script src="shared.js"></script>
+    <script>
+        // Renders the product list on the products page
+        function renderProductList() {
+            const productListDiv = document.getElementById('productList');
+            if (!productListDiv) return; // Exit if element not found
+
+            productListDiv.innerHTML = ''; // Clear previous content
+
+            products.forEach(product => {
+                const productCard = `
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
+                        <div class="relative overflow-hidden w-full h-48 sm:h-56">
+                            <img
+                                src="${product.imageUrl}"
+                                alt="${product.imageAlt}"
+                                class="w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
+                                onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Image+Not+Found';"
+                            >
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-2">${product.name}</h3>
+                            <p class="text-gray-600 text-base flex-grow">${product.description}</p>
+                            <div class="flex justify-between items-baseline mt-4 mb-4">
+                                <span class="text-3xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
+                                <span class="text-lg text-gray-500 line-through">$${product.originalPrice.toFixed(2)}</span>
+                            </div>
+                            <button class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium text-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300 shadow-md hover:shadow-lg"
+                                onclick="addToCart('${product.id}');">
+                                Add to Cart
+                            </button>
+                            <a href="product-detail.html?id=${product.id}" class="w-full mt-3 bg-gray-200 text-gray-800 text-center py-3 px-6 rounded-lg font-medium text-lg hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all duration-300 shadow-md">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                `;
+                productListDiv.insertAdjacentHTML('beforeend', productCard);
+            });
+        }
+
+        // Initialize the product list when the page loads
+        document.addEventListener('DOMContentLoaded', renderProductList);
+    </script>
+</body>
+</html>
